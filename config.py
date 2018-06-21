@@ -17,7 +17,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
     SQLALCHEMY_ECHO = False
-
+    # SQLALCHEMY_DATABASE_URI = 'sqlite:///books.db'
     # SERVER_NAME = 'localhost:8087'
 
 
