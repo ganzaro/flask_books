@@ -1,0 +1,27 @@
+
+a small demo rest flask
+
+    a bookstore crud
+
+
+v1
+    basic crud, sql alchemy, rest , gunicorn
+
+v2
+    auth , blueprints   
+
+v3
+    celery, mails, 
+
+v4
+    cli
+
+
+
+
+
+
+
+
+
+
