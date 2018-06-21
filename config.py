@@ -18,7 +18,7 @@ class DevelopmentConfig(Config):
 
     SQLALCHEMY_ECHO = False
 
-    SERVER_NAME = 'localhost:8087'
+    # SERVER_NAME = 'localhost:8087'
 
 
 

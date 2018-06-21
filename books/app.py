@@ -20,25 +20,12 @@ def create_app(config_name='development'):
     
     
     db.init_app(app)
-    
     migrate = Migrate(app, db)
-
-    @app.route('/help', methods = ['GET'])
-    def help():
-        """Print available functions."""
-        func_list = {}
-        for rule in app.url_map.iter_rules():
-            if rule.endpoint != 'static':
-                func_list[rule.rule] = app.view_functions[rule.endpoint].__doc__
-        return jsonify(func_list)
 
     from . import models
 
-    # from .blueprints.admin import admin as admin_blueprint
-    # app.register_blueprint(admin_blueprint, url_prefix='/admin')
-
-    # from .blueprints.user import user as user_blueprint
-    # app.register_blueprint(user_blueprint)
+    from .blueprints.books import books as books_blueprint
+    app.register_blueprint(books_blueprint)
 
     # from .blueprints.partner import partner as partner_blueprint
     # app.register_blueprint(partner_blueprint, url_prefix='/partner')
@@ -46,9 +33,12 @@ def create_app(config_name='development'):
     # from .blueprints.home import home as home_blueprint
     # app.register_blueprint(home_blueprint)
 
+    # from .blueprints.admin import admin as admin_blueprint
+    # app.register_blueprint(admin_blueprint, url_prefix='/admin')
+    
     return app
 
-from . import controllers
+
 
 
 
