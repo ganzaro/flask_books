@@ -22,7 +22,6 @@ def create_app(config_name='development'):
     db.init_app(app)
     migrate = Migrate(app, db)
 
-    from . import models
 
     from .blueprints.books import books as books_blueprint
     app.register_blueprint(books_blueprint)

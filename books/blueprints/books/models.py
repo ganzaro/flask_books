@@ -29,8 +29,11 @@ class Publisher(db.Model):
     def __init__(self, name, **kwargs):
         db.Model.__init__(self, name=name, **kwargs)
 
+    # def __repr__(self):
+    #     return self.name
+
     def __repr__(self):
-        return self.name
+        return '<Publisher {}>'.format(self.name)  
 
 
 class Author(db.Model):

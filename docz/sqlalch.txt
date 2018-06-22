@@ -1,0 +1,18 @@
+
+In [1]: from books.blueprints.books.models import Publisher
+
+In [2]: p = Publisher(name='pb1')
+
+In [3]: p
+Out[3]: <Publisher pb1>
+
+
+from books.app import db, create_app
+app = create_app()
+app.app_context().push()
+
+
+>>> db.session.add(p)
+>>> db.session.commit()
+
+
