@@ -1,5 +1,5 @@
 import os
-basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 class Config(object):
     """
@@ -7,6 +7,11 @@ class Config(object):
     """
 
     DEBUG = False
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    APP_DIR = os.path.abspath(os.path.dirname(__file__))
+    PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
+
 
 
 class DevelopmentConfig(Config):
@@ -17,6 +22,14 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
     SQLALCHEMY_ECHO = False
+
+    DB_NAME = 'dev.db'
+
+    DB_PATH = os.path.join(Config.BASE_DIR, DB_NAME)
+
+    # DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
+
     # SQLALCHEMY_DATABASE_URI = 'sqlite:///books.db'
     # SERVER_NAME = 'localhost:8087'
 
