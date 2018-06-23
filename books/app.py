@@ -2,10 +2,12 @@ from flask import Flask, jsonify
 
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 
 from config import app_config
 
 db = SQLAlchemy()
+ma = Marshmallow()
 
 
 def create_app(config_name='development'):
@@ -22,6 +24,7 @@ def create_app(config_name='development'):
     db.init_app(app)
     migrate = Migrate(app, db)
 
+    ma.init_app(app)
 
     from .blueprints.books import books as books_blueprint
     app.register_blueprint(books_blueprint)

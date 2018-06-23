@@ -3,6 +3,7 @@ import json
 
 from . import books
 from .models import Publisher
+from .serializers import pub_schema, pubs_schema
 from books.app import db
 
 @books.route('/')
@@ -18,15 +19,17 @@ def hello():
 # list
 @books.route('/api/publishers', methods=['GET'])
 def get_publishers():
-    res = Publisher.query.all()
-    return json.dumps(res)
+    query = Publisher.query.all()
+    result = pubs_schema.dump(query)
+    return jsonify(result.data)
 
 # get
-@books.route('/api/publishers<int:id>', methods=['GET'])
+@books.route('/api/publishers/<int:id>', methods=['GET'])
 def get_publisher(id):
-    res = Publisher.query.filter_by(id).first()
+    query = Publisher.query.filter_by(id=id).first()
+    result = pub_schema.dump(query)
+    return jsonify(result.data)
     # TODO add not found exception
-    return json.dumps(res)
 
 # add
 @books.route('/api/publishers/add', methods=['POST'])
