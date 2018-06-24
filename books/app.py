@@ -3,12 +3,15 @@ from flask import Flask, jsonify
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from flask_bcrypt import Bcrypt
+from flask_cors import CORS
 
 from config import app_config
 
 db = SQLAlchemy()
 ma = Marshmallow()
-
+bcrypt = Bcrypt()
+cors = CORS()
 
 def create_app(config_name='development'):
     if config_name == 'heroku':
@@ -25,6 +28,8 @@ def create_app(config_name='development'):
     migrate = Migrate(app, db)
 
     ma.init_app(app)
+    bcrypt.init_app(app)
+    cors.init_app(app)
 
     from .blueprints.books import books as books_blueprint
     app.register_blueprint(books_blueprint)

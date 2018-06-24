@@ -5,7 +5,7 @@ a small demo rest flask
 
 
 v1
-    basic crud, sql alchemy, rest , blueprints, 
+    basic crud, sql alchemy, rest , blueprints, marshmallow,
 
 v2
     auth ,    
