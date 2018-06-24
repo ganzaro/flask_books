@@ -34,13 +34,15 @@ def create_app(config_name='development'):
     from .blueprints.books import books as books_blueprint
     app.register_blueprint(books_blueprint)
 
-    from .blueprints.auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint)
-    #  app.register_blueprint(auth_blueprint, url_prefix='/auth')
-
+    # from .blueprints.boo import boo as boo_bp
+    # app.register_blueprint(boo_bp)
 
     from .blueprints.profile import profile as profile_blueprint
     app.register_blueprint(profile_blueprint)
+
+    from .blueprints.auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint)
+    #  app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
     # from .blueprints.admin import admin as admin_blueprint
     # app.register_blueprint(admin_blueprint, url_prefix='/admin')

@@ -1,4 +1,7 @@
+import datetime as dt
+
 from books.app import db
+
 
 class UserProfile(db.Model):
 
@@ -14,6 +17,3 @@ class UserProfile(db.Model):
 
     def __repr__(self):
         return '<Profile %r>' % self.name
-
-
-
