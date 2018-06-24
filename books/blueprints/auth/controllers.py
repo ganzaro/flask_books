@@ -6,6 +6,7 @@ from flask.views import MethodView
 
 from books.app import bcrypt, db
 from books.blueprints.auth.models import User, BlacklistToken
+from books.blueprints.profile.models import UserProfile
 from . import auth
 
 # auth_blueprint = Blueprint('auth', __name__)
@@ -15,9 +16,9 @@ class RegisterAPI(MethodView):
     """
     User Registration Resource
     TODO 
-        use a Profile model, 
+            use a Profile model, 
         add confirm mail celery task, 
-        add db rollbacks
+            add db rollbacks
     """
 
     def post(self):
@@ -31,9 +32,15 @@ class RegisterAPI(MethodView):
                     email=post_data.get('email'),
                     password=post_data.get('password')
                 )
-                # insert the user
                 db.session.add(user)
                 db.session.commit()
+
+                user_profile = UserProfile(
+                    name=post_data.get('username'),
+                    user_id=user.id)
+                db.session.add(user_profile)
+                db.session.commit()
+
                 # generate the auth token
                 auth_token = user.encode_auth_token(user.id)
                 responseObject = {
