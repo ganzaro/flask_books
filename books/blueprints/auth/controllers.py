@@ -6,8 +6,9 @@ from flask.views import MethodView
 
 from books.app import bcrypt, db
 from books.blueprints.auth.models import User, BlacklistToken
+from . import auth
 
-auth_blueprint = Blueprint('auth', __name__)
+# auth_blueprint = Blueprint('auth', __name__)
 
 
 class RegisterAPI(MethodView):
@@ -186,22 +187,22 @@ user_view = UserAPI.as_view('user_api')
 logout_view = LogoutAPI.as_view('logout_api')
 
 # add Rules for API Endpoints
-auth_blueprint.add_url_rule(
+auth.add_url_rule(
     '/auth/register',
     view_func=registration_view,
     methods=['POST']
 )
-auth_blueprint.add_url_rule(
+auth.add_url_rule(
     '/auth/login',
     view_func=login_view,
     methods=['POST']
 )
-auth_blueprint.add_url_rule(
+auth.add_url_rule(
     '/auth/status',
     view_func=user_view,
     methods=['GET']
 )
-auth_blueprint.add_url_rule(
+auth.add_url_rule(
     '/auth/logout',
     view_func=logout_view,
     methods=['POST']

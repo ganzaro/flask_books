@@ -35,7 +35,9 @@ def create_app(config_name='development'):
     app.register_blueprint(books_blueprint)
 
     from .blueprints.auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+    app.register_blueprint(auth_blueprint)
+    #  app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
 
     # from .blueprints.home import home as home_blueprint
     # app.register_blueprint(home_blueprint)
