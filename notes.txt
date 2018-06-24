@@ -5,13 +5,14 @@ a small demo rest flask
 
 
 v1
-    basic crud, sql alchemy, rest , gunicorn
+    basic crud, sql alchemy, rest , blueprints, 
 
 v2
-    auth , blueprints   
+    auth ,    
+
 
 v3
-    celery, mails, 
+    celery, mails, gunicorn
 
 v4
     cli
