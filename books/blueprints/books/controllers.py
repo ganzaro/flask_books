@@ -51,7 +51,20 @@ def create_publisher(**kwargs):
     return jsonify(result)
 
 
-# edit
+# update
+@books.route('/api/publishers/edit/<int:id>', methods=['PUT'])
+def update_publisher(id):
+    pub = Publisher.query.filter_by(id=id).first()
+
+    name = request.json['name']
+    # email = request.json['email']
+
+    pub.name = name
+
+    db.session.commit()
+
+    result = pub_schema.dump(pub).data
+    return jsonify(result)    
 
 
 # delete
