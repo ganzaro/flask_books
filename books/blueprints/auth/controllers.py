@@ -9,11 +9,15 @@ from books.blueprints.auth.models import User, BlacklistToken
 from . import auth
 
 # auth_blueprint = Blueprint('auth', __name__)
-
+# TODO - add update user, add get user identity
 
 class RegisterAPI(MethodView):
     """
     User Registration Resource
+    TODO 
+        use a Profile model, 
+        add confirm mail celery task, 
+        add db rollbacks
     """
 
     def post(self):
@@ -39,6 +43,7 @@ class RegisterAPI(MethodView):
                 }
                 return make_response(jsonify(responseObject)), 201
             except Exception as e:
+                db.session.rollback()
                 responseObject = {
                     'status': 'fail',
                     'e': '{}'.format(e),

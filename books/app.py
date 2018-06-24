@@ -39,8 +39,8 @@ def create_app(config_name='development'):
     #  app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
 
-    # from .blueprints.home import home as home_blueprint
-    # app.register_blueprint(home_blueprint)
+    from .blueprints.profile import profile as profile_blueprint
+    app.register_blueprint(profile_blueprint)
 
     # from .blueprints.admin import admin as admin_blueprint
     # app.register_blueprint(admin_blueprint, url_prefix='/admin')
