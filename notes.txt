@@ -12,13 +12,17 @@ v2
 
 
 v3
-    celery, mails, gunicorn
+    celery, mails, 
+
+        create send confirmation email task
+        call it from auth register 
 
 v4
     cli
 
+service pattern
 
-
+gunicorn
 
 
 

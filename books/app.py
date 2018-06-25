@@ -19,6 +19,7 @@ mail = SendGrid()
 
 CELERY_TASK_LIST = [
     'books.blueprints.profile.tasks',
+    'books.blueprints.auth.tasks',
 ]
 
 def create_celery_app(app=None):

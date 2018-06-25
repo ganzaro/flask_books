@@ -41,6 +41,9 @@ class RegisterAPI(MethodView):
                 db.session.add(user_profile)
                 db.session.commit()
 
+                from .tasks import send_confirmation_email
+                send_confirmation_email(user.email)
+
                 # generate the auth token
                 auth_token = user.encode_auth_token(user.id)
                 responseObject = {
