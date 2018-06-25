@@ -10,15 +10,15 @@ from books.blueprints.profile.models import UserProfile
 from . import auth
 
 # auth_blueprint = Blueprint('auth', __name__)
-# TODO - add update user, add get user identity
+# TODO - 
+# add update user, 
+# add confirm mail celery task,
+# add get user identity
+# forgot password   
 
 class RegisterAPI(MethodView):
     """
     User Registration Resource
-    TODO 
-            use a Profile model, 
-        add confirm mail celery task, 
-            add db rollbacks
     """
 
     def post(self):

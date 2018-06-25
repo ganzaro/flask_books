@@ -12,7 +12,10 @@ def profile1():
    return 'Hello Profile'
 
 
-# crud
-##########
-# Publishers
-##########
+# mail check
+@profile.route('/send_mail')
+def send_mail():
+    from .tasks import send_email
+    send_email()
+
+    return 'mail'

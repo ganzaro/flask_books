@@ -30,9 +30,14 @@ class DevelopmentConfig(Config):
     # DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
     SQLALCHEMY_DATABASE_URI = 'sqlite:///{0}'.format(DB_PATH)
 
-    # SQLALCHEMY_DATABASE_URI = 'sqlite:///books.db'
-    # SERVER_NAME = 'localhost:8087'
+    CELERY_BROKER_URL='redis://localhost:6379'
+    CELERY_RESULT_BACKEND='redis://localhost:6379'
+    CELERY_ACCEPT_CONTENT = ['json']
+    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_REDIS_MAX_CONNECTIONS = 5
 
+    # SERVER_NAME = 'localhost:8087'
 
 
 class ProductionConfig(Config):
