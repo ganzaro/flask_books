@@ -8,9 +8,10 @@ def send_email():
     # send single recipient; single email as sendgrid.mail.helpers.Email object
     mail.send_email(
         from_email='someone@yourdomain.com',
-        to_email='pedx78@gmail.com',
-        subject='Test Celery again',
+        to_email='ganzaro.af@gmail.com',
+        subject='Test Celery mail',
         text='it works!!',
+        personalizations=''
         # body='body ...'
     )
 

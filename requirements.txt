@@ -12,7 +12,7 @@ Flask-Bcrypt==0.7.1
 Flask-Cors==3.0.6
 flask-marshmallow==0.9.0
 Flask-Migrate==2.2.1
-Flask-SendGrid==0.6
+Flask-SendGrid==0.5.2
 Flask-SQLAlchemy==2.3.2
 itsdangerous==0.24
 Jinja2==2.10
@@ -28,7 +28,7 @@ python-editor==1.0.3
 python-http-client==3.1.0
 pytz==2018.4
 PyYAML==3.12
-sendgrid==5.4.0
+sendgrid==3.6.5
 six==1.11.0
 SQLAlchemy==1.2.8
 vine==1.1.4
