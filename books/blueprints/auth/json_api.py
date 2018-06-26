@@ -1,7 +1,7 @@
 # project/server/auth/views.py
 
 
-from flask import Blueprint, request, make_response, jsonify
+from flask import Blueprint, request, make_response, jsonify, abort
 from flask.views import MethodView
 
 from books.app import bcrypt, db
@@ -12,7 +12,7 @@ from . import auth
 # auth_blueprint = Blueprint('auth', __name__)
 # TODO - 
 # add update user, 
-# add confirm mail celery task,
+    # add confirm mail celery task,
 # add get user identity
 # forgot password   
 
@@ -194,6 +194,24 @@ class LogoutAPI(MethodView):
                 'message': 'Provide a valid auth token.'
             }
             return make_response(jsonify(responseObject)), 403
+
+
+@auth.route('/auth/forgot-password', methods=['POST'])
+def forgot_password():
+    email = request.json.get('email')
+    if email is None:
+        abort(400)
+
+    try:
+        u = User.initialize_password_reset(email)
+        msg = ('An email has been sent to {0}.'.format(email))
+
+    except Exception as e:
+        return jsonify({'message': e.__str__()}), 500
+    
+    return jsonify(msg), 200
+
+
 
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')

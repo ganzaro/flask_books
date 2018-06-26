@@ -1,10 +1,10 @@
-# project/server/models.py
-
 
 import jwt
 import datetime
 
 from flask import current_app
+from itsdangerous import URLSafeTimedSerializer, \
+    TimedJSONWebSignatureSerializer
 
 from books.app import db, bcrypt
 
@@ -64,6 +64,54 @@ class User(db.Model):
             return 'Signature expired. Please log in again.'
         except jwt.InvalidTokenError:
             return 'Invalid token. Please log in again.'
+
+    @classmethod
+    def initialize_password_reset(cls, identity):
+        """
+        Generate a token to reset the password for a specific user.
+
+        :param identity: User e-mail address or username
+        :type identity: str
+        :return: User instance
+        """
+        u = User.find_by_identity(identity)
+        print('user {}'.format(identity))
+        reset_token = u.serialize_token()
+
+        # This prevents circular imports.
+        from books.blueprints.auth.tasks import deliver_password_reset_email
+
+        deliver_password_reset_email.delay(u.id, reset_token)
+
+        return u
+
+
+    @classmethod
+    def find_by_identity(cls, identity):
+        """
+        Find a user by their e-mail or username.
+
+        :param identity: Email or username
+        :type identity: str
+        :return: User instance
+        """
+        return User.query.filter(User.email == identity)
+          #| (User.username == identity)).first()
+
+
+    def serialize_token(self, expiration=3600):
+        """
+        Sign and create a token that can be used for things such as resetting
+        a password or other tasks that involve a one off token.
+
+        :param expiration: Seconds until it expires, defaults to 1 hour
+        :type expiration: int
+        :return: JSON
+        """
+        private_key = current_app.config['SECRET_KEY']
+
+        serializer = TimedJSONWebSignatureSerializer(private_key, expiration)
+        return serializer.dumps({'user_email': self.email}).decode('utf-8')
 
 
 class BlacklistToken(db.Model):

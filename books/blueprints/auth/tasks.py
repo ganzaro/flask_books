@@ -30,3 +30,37 @@ def send_confirmation_email(user_email):
     )
     print('after mail sent')
 
+
+
+@celery.task()
+def deliver_password_reset_email(user_email, reset_token):
+    """
+    Send a reset password e-mail to a user.
+
+    :param user_id: The user id
+    :type user_id: int
+    :param reset_token: The reset token
+    :type reset_token: str
+    :return: None if a user was not found
+    """
+    # usr = User.query.get(user_id)
+    usr = User.query.filter_by(email=user_email).first_or_404()
+    to = usr.email
+    link = url_for('auth.password_reset', reset_token=reset_token)
+    reset_msg = 'your password reset email link {0}'.format(link)
+
+    if usr is None:
+        return
+
+    mail.send_email(
+        from_email='admin@wc.com',
+        to_email=to,
+        subject='Reset Password',
+        text=reset_msg
+    )
+
+    return None
+
+
+
+
