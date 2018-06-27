@@ -32,7 +32,7 @@ def confirm_email(token):
 
 
 
-@auth.route('/account/password_reset', methods=['GET', 'POST'])
+@auth.route('/password_reset', methods=['GET', 'POST'])
 def password_reset():
     form = PasswordResetForm(reset_token=request.args.get('reset_token'))
 
@@ -43,7 +43,7 @@ def password_reset():
             flash('Your reset token has expired or was tampered with.',
                   'error')
             # return redirect(url_for('auth.begin_password_reset'))
-            return 'Please reset passwprd again'
+            return 'Please reset password again'
 
         form.populate_obj(u)
         u.password = User.encrypt_password(request.form.get('password'))

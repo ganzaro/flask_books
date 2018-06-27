@@ -42,7 +42,7 @@ class RegisterAPI(MethodView):
                 db.session.commit()
 
                 from .tasks import send_confirmation_email
-                send_confirmation_email(user.email)
+                send_confirmation_email.delay(user.email)
 
                 # generate the auth token
                 auth_token = user.encode_auth_token(user.id)
@@ -203,7 +203,10 @@ def forgot_password():
         abort(400)
 
     try:
-        u = User.initialize_password_reset(email)
+        from .tasks import deliver_password_reset_email
+
+        deliver_password_reset_email.delay(email)
+        # u = User.initialize_password_reset(email)
         msg = ('An email has been sent to {0}.'.format(email))
 
     except Exception as e:

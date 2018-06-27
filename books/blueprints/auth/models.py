@@ -74,7 +74,8 @@ class User(db.Model):
         :type identity: str
         :return: User instance
         """
-        u = User.find_by_identity(identity)
+        # u = User.find_by_identity(identity).first()
+        u = User.query.filter_by(email=identity).first()
         print('user {}'.format(identity))
         reset_token = u.serialize_token()
 
@@ -82,7 +83,8 @@ class User(db.Model):
         from books.blueprints.auth.tasks import deliver_password_reset_email
 
         deliver_password_reset_email.delay(u.id, reset_token)
-
+        print('********************************************************')
+        print('model password_reset')
         return u
 
 
