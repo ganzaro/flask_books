@@ -20,7 +20,13 @@ v3
 v4
     cli
 
-service pattern
+repository pattern
+    routes
+    usecases
+    repository
+        db, cache, network, file
+
+docker
 
 gunicorn
 
