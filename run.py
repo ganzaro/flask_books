@@ -7,9 +7,9 @@ from books.app import create_app
 config_name = os.getenv('FLASK_CONFIG')
 app = create_app(config_name)
 
-@app.route("/hello")
+@app.route("/")
 def index():
-    return "Hello, World!"
+    return "Hello Books"
 
 @app.route('/help', methods = ['GET'])
 def help():

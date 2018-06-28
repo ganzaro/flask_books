@@ -1,80 +1,75 @@
 import json
 
 from flask import jsonify, request, current_app
+from flask.views import MethodView
 
 from . import books
 from .models import Publisher
 from .serializers import pub_schema, pubs_schema
 from books.app import db
 
-@books.route('/')
-def hello():
-   return 'Hello Books'
 
-
-# crud
 ##########
 # Publishers
 ##########
 
-# list
-@books.route('/api/publishers', methods=['GET'])
-def get_publishers():
-    query = Publisher.query.all()
-    result = pubs_schema.dump(query)
-    return jsonify(result.data)
-    # return query
+class PublisherAPI(MethodView):
+
+    # @books.route('/api/publishers', methods=['GET'])
+    def get(self, pub_id):
+        if not pub_id:
+            query = Publisher.query.all()
+        else:
+            query = Publisher.query.filter_by(id=id).first()
+        result = pubs_schema.dump(query)
+        return jsonify(result.data)
 
 
-# get
-@books.route('/api/publishers/<int:id>', methods=['GET'])
-def get_publisher(id):
-    query = Publisher.query.filter_by(id=id).first()
-    result = pub_schema.dump(query)
-    return jsonify(result.data)
-    # TODO add not found exception
+    # def get_publishers_uc(self):
+    #     query = Publisher.query.all()
+    #     result = pubs_schema.dump(query)
+    #     return jsonify(result.data)
 
 
-# add
-@books.route('/api/publishers/add', methods=['POST'])
-def create_publisher(**kwargs):
-    # TODO check for duplicate b4 adding to db
-    name = request.json['name']
-    # email = request.json['email']
-    
-    new_pub = Publisher(name, **kwargs)
+    # @books.route('/api/publishers/add', methods=['POST'])
+    def post(self, **kwargs):
+        # TODO check for duplicate b4 adding to db
+        name = request.json['name']
+        # email = request.json['email']
+        
+        new_pub = Publisher(name, **kwargs)
 
-    db.session.add(new_pub)
-    db.session.commit()
+        db.session.add(new_pub)
+        db.session.commit()
 
-    result = pub_schema.dump(new_pub).data
-    return jsonify(result)
-
-
-# update
-@books.route('/api/publishers/edit/<int:id>', methods=['PUT'])
-def update_publisher(id):
-    pub = Publisher.query.filter_by(id=id).first()
-
-    name = request.json['name']
-    # email = request.json['email']
-
-    pub.name = name
-
-    db.session.commit()
-
-    result = pub_schema.dump(pub).data
-    return jsonify(result)    
+        result = pub_schema.dump(new_pub).data
+        return jsonify(result)
 
 
-# delete
-@books.route('/api/publishers/del/<int:id>', methods=('DELETE',))
-# @jwt_required()
-def delete_publisher(id):
-    pub = Publisher.query.filter_by(id=id).first()
-    db.session.delete(pub)
-    db.session.commit()
-    return 'Deleted', 200
+    # update
+    # @books.route('/api/publishers/edit/<int:id>', methods=['PUT'])
+    def put(self, pub_id):
+        pub = Publisher.query.filter_by(id=id).first()
+
+        name = request.json['name']
+        # email = request.json['email']
+
+        pub.name = name
+
+        db.session.commit()
+
+        result = pub_schema.dump(pub).data
+        return jsonify(result)    
+
+
+    # delete
+    # @books.route('/api/publishers/del/<int:id>', methods=('DELETE',))
+    # @jwt_required()
+    def delete(self, id):
+        pub = Publisher.query.filter_by(id=id).first()
+        db.session.delete(pub)
+        db.session.commit()
+        return 'Deleted', 200
 
 
 ##########
