@@ -7,7 +7,7 @@ from . import books
 from .models import Publisher
 from .serializers import pub_schema, pubs_schema
 from books.app import db
-
+from . usecase import GetPublishersUseCase
 
 ##########
 # Publishers
@@ -15,7 +15,9 @@ from books.app import db
 
 class PublisherAPI(MethodView):
 
-    # @books.route('/api/publishers', methods=['GET'])
+    def __init__(self, usecase):
+        pass
+    
     def get(self, pub_id):
         if not pub_id:
             query = Publisher.query.all()
