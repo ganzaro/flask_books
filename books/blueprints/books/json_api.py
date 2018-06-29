@@ -15,22 +15,17 @@ from . usecase import GetPublishersUseCase
 
 class PublisherAPI(MethodView):
 
-    def __init__(self, usecase):
-        pass
+    def __init__(self, usecase=GetPublishersUseCase):
+        self.usecase = usecase()
     
     def get(self, pub_id):
         if not pub_id:
-            query = Publisher.query.all()
+            self.usecase.execute()
+            # query = Publisher.query.all()
         else:
             query = Publisher.query.filter_by(id=id).first()
         result = pubs_schema.dump(query)
         return jsonify(result.data)
-
-
-    # def get_publishers_uc(self):
-    #     query = Publisher.query.all()
-    #     result = pubs_schema.dump(query)
-    #     return jsonify(result.data)
 
 
     # @books.route('/api/publishers/add', methods=['POST'])
