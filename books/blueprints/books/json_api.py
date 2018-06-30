@@ -7,7 +7,7 @@ from . import books
 from .models import Publisher
 from .serializers import pub_schema, pubs_schema
 from books.app import db
-from . usecase import GetPublishersUseCase
+from . usecase import GetPublishersUseCase, GetPublisherUseCase
 
 ##########
 # Publishers
@@ -15,16 +15,24 @@ from . usecase import GetPublishersUseCase
 
 class PublisherAPI(MethodView):
 
-    def __init__(self, usecase=GetPublishersUseCase):
-        self.usecase = usecase()
+    def __init__(self, 
+                get_pubs_uc=None, 
+                get_pub_uc=None,
+                create_pub_uc=None,
+                edit_pub_uc=None):
+
+        self.get_pubs_uc = get_pubs_uc or GetPublishersUseCase()
+        self.get_pub_uc = get_pub_uc or GetPublisherUseCase()
     
     def get(self, pub_id):
         if not pub_id:
-            self.usecase.execute()
-            # query = Publisher.query.all()
+            query = self.get_pubs_uc.execute()
+            result = pubs_schema.dump(query)
         else:
-            query = Publisher.query.filter_by(id=id).first()
-        result = pubs_schema.dump(query)
+            self.get_pub_uc.set_params(pub_id)
+            query = self.get_pub_uc.execute()
+            result = pub_schema.dump(query)
+
         return jsonify(result.data)
 
 

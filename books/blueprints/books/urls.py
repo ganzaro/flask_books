@@ -29,4 +29,11 @@ books.add_url_rule(
     methods=['POST']
 )
 
+books.add_url_rule(
+    '/api/v1/publishers/<int:pub_id>', 
+    view_func=pub_api,
+    methods=['GET', 'PUT', 'DELETE'])
+
+
 # @books.route('/api/publishers', methods=['GET'])
+
