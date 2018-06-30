@@ -7,7 +7,8 @@ from . import books
 from .models import Publisher
 from .serializers import pub_schema, pubs_schema
 from books.app import db
-from . usecase import GetPublishersUseCase, GetPublisherUseCase
+from . usecase import GetPublishersUseCase, \
+            GetPublisherUseCase, AddPublisherUseCase
 
 ##########
 # Publishers
@@ -23,6 +24,7 @@ class PublisherAPI(MethodView):
 
         self.get_pubs_uc = get_pubs_uc or GetPublishersUseCase()
         self.get_pub_uc = get_pub_uc or GetPublisherUseCase()
+        self.create_pub_uc = create_pub_uc or AddPublisherUseCase()
     
     def get(self, pub_id):
         if not pub_id:
@@ -36,7 +38,6 @@ class PublisherAPI(MethodView):
         return jsonify(result.data)
 
 
-    # @books.route('/api/publishers/add', methods=['POST'])
     def post(self, **kwargs):
         # TODO check for duplicate b4 adding to db
         name = request.json['name']
@@ -44,8 +45,8 @@ class PublisherAPI(MethodView):
         
         new_pub = Publisher(name, **kwargs)
 
-        db.session.add(new_pub)
-        db.session.commit()
+        self.create_pub_uc.set_params(new_pub)
+        self.create_pub_uc.execute()
 
         result = pub_schema.dump(new_pub).data
         return jsonify(result)

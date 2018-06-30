@@ -1,3 +1,5 @@
+# fedora 27
+# workon flask_rest
 
 export FLASK_CONFIG=development
 
