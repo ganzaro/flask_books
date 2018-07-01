@@ -9,6 +9,7 @@ from .serializers import pub_schema, pubs_schema
 from books.app import db
 from . usecase import GetPublishersUseCase, \
             GetPublisherUseCase, AddPublisherUseCase
+from ...utils.exceptionz import PublisherNotFoundException
 
 ##########
 # Publishers
@@ -27,15 +28,24 @@ class PublisherAPI(MethodView):
         self.create_pub_uc = create_pub_uc or AddPublisherUseCase()
     
     def get(self, pub_id):
-        if not pub_id:
-            query = self.get_pubs_uc.execute()
-            result = pubs_schema.dump(query)
-        else:
-            self.get_pub_uc.set_params(pub_id)
-            query = self.get_pub_uc.execute()
-            result = pub_schema.dump(query)
+        try:
+            if not pub_id:
+                query = self.get_pubs_uc.execute()
+                result = pubs_schema.dump(query)
+            else:
+                self.get_pub_uc.set_params(pub_id)
+                query = self.get_pub_uc.execute()
+                result = pub_schema.dump(query)
 
-        return jsonify(result.data)
+            return jsonify(result.data)
+
+        except PublisherNotFoundException as e:
+            response = {
+                    'status': 'fail',
+                    'e': '{}'.format(e),
+                    'message': 'Publisher Not Found. Please try again.'
+                }
+            return jsonify(response)
 
 
     def post(self, **kwargs):

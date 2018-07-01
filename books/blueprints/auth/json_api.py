@@ -8,15 +8,23 @@ from books.app import bcrypt, db
 from books.blueprints.auth.models import User, BlacklistToken
 from books.blueprints.profile.models import UserProfile
 from . import auth
+from . usecase import GetUsersUseCase, \
+            GetUserUseCase, RegisterUserUseCase
 
-# auth_blueprint = Blueprint('auth', __name__)
 # TODO - 
-# add update user, 
-    # add confirm mail celery task,
-# add get user identity
-# forgot password   
+# repair confirm email, forgot pwd
+# convert to repo pattern
+
+#         self.get_users_uc = get_users_uc or GetUsersUseCase()
 
 class RegisterAPI(MethodView):
+    def __init__(self, 
+                get_user_uc=None,
+                create_user_uc=None):
+
+        self.get_user_uc = get_user_uc or GetUserUseCase()
+        self.create_user_uc = create_user_uc or RegisterUserUseCase()
+    
     """
     User Registration Resource
     """
@@ -25,15 +33,17 @@ class RegisterAPI(MethodView):
         # get the post data
         post_data = request.get_json()
         # check if user already exists
-        user = User.query.filter_by(email=post_data.get('email')).first()
+        self.get_user_uc.set_params(post_data.get('email'))
+        user = self.get_user_uc.execute()
+        # user = User.query.filter_by(email=post_data.get('email')).first()
         if not user:
             try:
                 user = User(
                     email=post_data.get('email'),
                     password=post_data.get('password')
                 )
-                db.session.add(user)
-                db.session.commit()
+                self.create_user_uc.set_params(user)
+                self.create_user_uc.execute()
 
                 user_profile = UserProfile(
                     name=post_data.get('username'),

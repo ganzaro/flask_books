@@ -1,5 +1,6 @@
 from . repository import PublisherRepository
 from books.app import db
+from ...utils.exceptionz import PublisherNotFoundException
 
 class GetPublishersUseCase():
 
@@ -19,7 +20,11 @@ class GetPublisherUseCase():
         self.id = id
 
     def execute(self):
-        return self.repo.get_one(self.id)
+        publisher = self.repo.get_one(self.id)
+        if not publisher:
+            raise PublisherNotFoundException(self.id)
+        else:
+            return publisher
 
 
 class AddPublisherUseCase():
@@ -30,10 +35,8 @@ class AddPublisherUseCase():
     def set_params(self, publisher):
         self.publisher = publisher
 
-
     def execute(self):
-        db.session.add(self.publisher)
-        db.session.commit()
+        self.repo.add_one(self.publisher)
 
 
 

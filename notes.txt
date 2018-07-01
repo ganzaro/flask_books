@@ -1,8 +1,6 @@
 
 a small demo rest flask
-
     a bookstore crud
-
 
 v1
     basic crud, sql alchemy, rest , blueprints, marshmallow,
@@ -10,25 +8,32 @@ v1
 v2
     auth ,    
 
-
 v3
     celery, mails, 
-
         create send confirmation email task
-        call it from auth register 
 
 v4
-    cli
+    repository pattern
+        routes , usecases, repository
+            db, cache, network, file
 
-repository pattern
-    routes
-    usecases
-    repository
-        db, cache, network, file
+decorators
+    protect routes 
+
+admin
+
+logging
+
+error handling
+
+tests
 
 docker
 
-gunicorn
+gunicorn, waitress
+
+cli
+
 
 
 
