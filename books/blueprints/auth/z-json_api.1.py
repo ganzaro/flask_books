@@ -10,7 +10,7 @@ from books.blueprints.profile.models import UserProfile
 from . import auth
 from . usecase import GetUsersUseCase, \
             GetUserUseCase, RegisterUserUseCase
-from ...utils.exceptionz import UserAlreadyExistsException
+
 # TODO - 
 # repair confirm email, forgot pwd
 # convert to repo pattern
@@ -18,9 +18,6 @@ from ...utils.exceptionz import UserAlreadyExistsException
 #         self.get_users_uc = get_users_uc or GetUsersUseCase()
 
 class RegisterAPI(MethodView):
-    """
-    User Registration Resource
-    """
     def __init__(self, 
                 get_user_uc=None,
                 create_user_uc=None):
@@ -28,43 +25,56 @@ class RegisterAPI(MethodView):
         self.get_user_uc = get_user_uc or GetUserUseCase()
         self.create_user_uc = create_user_uc or RegisterUserUseCase()
     
+    """
+    User Registration Resource
+    """
+
     def post(self):
-        try:
-            post_data = request.get_json()
-            self.create_user_uc.set_params(
-                post_data.get('email'),
-                post_data.get('username'),
-                post_data.get('password'),
-                post_data.get('password2'))
+        post_data = request.get_json()
+        # check if user already exists
+        self.get_user_uc.set_params(post_data.get('email'))
+        user = self.get_user_uc.execute()
+        if not user:
+            try:
+                user = User(
+                    email=post_data.get('email'),
+                    password=post_data.get('password')
+                )
+                self.create_user_uc.set_params(user)
+                self.create_user_uc.execute()
 
-            user = self.create_user_uc.execute()
-            print('api-user-is {}'.format(user.email))
+                user_profile = UserProfile(
+                    name=post_data.get('username'),
+                    user_id=user.id)
+                db.session.add(user_profile)
+                db.session.commit()
 
-            # generate the auth token
-            auth_token = user.encode_auth_token(user.id)
-            resp = {
-                'status': 'success',
-                'message': 'Successfully registered.',
-                'auth_token': auth_token.decode()
-            }
-            return make_response(jsonify(resp)), 201
+                from .tasks import send_confirmation_email
+                send_confirmation_email.delay(user.email)
 
-        except UserAlreadyExistsException as e:
-            resp = {
+                # generate the auth token
+                auth_token = user.encode_auth_token(user.id)
+                responseObject = {
+                    'status': 'success',
+                    'message': 'Successfully registered.',
+                    'auth_token': auth_token.decode()
+                }
+                return make_response(jsonify(responseObject)), 201
+            except Exception as e:
+                db.session.rollback()
+                responseObject = {
+                    'status': 'fail',
+                    'e': '{}'.format(e),
+                    'message': 'Some error occurred. Please try again.'
+                }
+                return make_response(jsonify(responseObject)), 401
+        else:
+            responseObject = {
                 'status': 'fail',
-                'e': '{}'.format(e),
-                'message': 'Some error occurred. Please try again.'
+                'message': 'User already exists. Please Log in.',
             }
-            return make_response(jsonify(resp)), 401            
+            return make_response(jsonify(responseObject)), 202
 
-        except Exception as e:
-            db.session.rollback()
-            resp = {
-                'status': 'fail',
-                'e': '{}'.format(e),
-                'message': 'Some error occurred. Please try again.'
-            }
-            return make_response(jsonify(resp)), 401
 
 class LoginAPI(MethodView):
     """

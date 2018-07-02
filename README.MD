@@ -17,3 +17,7 @@ flask db migrate
 flask db upgrade
 
 
+celery worker -l info -A books.blueprints.auth.tasks
+
+
+

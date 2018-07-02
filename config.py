@@ -37,7 +37,7 @@ class DevelopmentConfig(Config):
     CELERY_RESULT_SERIALIZER = 'json'
     CELERY_REDIS_MAX_CONNECTIONS = 5
 
-    # SERVER_NAME = 'localhost:8087'
+    SERVER_NAME = 'localhost:5002'
 
 
 class ProductionConfig(Config):

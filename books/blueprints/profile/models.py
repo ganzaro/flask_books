@@ -17,3 +17,7 @@ class UserProfile(db.Model):
 
     def __repr__(self):
         return '<Profile %r>' % self.name
+
+    def __init__(self, username, user_id):
+        self.name = username
+        self.user_id = user_id

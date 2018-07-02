@@ -21,11 +21,18 @@ class User(db.Model):
 
     def __init__(self, email, password, admin=False):
         self.email = email
-        self.password = bcrypt.generate_password_hash(
-            password, current_app.config.get('BCRYPT_LOG_ROUNDS')
-        ).decode()
+        self.password = password
+        # bcrypt.generate_password_hash(
+        #     password, current_app.config.get('BCRYPT_LOG_ROUNDS')
+        # ).decode()
         self.registered_on = datetime.datetime.now()
         self.admin = admin
+
+    # def __init__(self, **kwargs):
+    #     # Call Flask-SQLAlchemy's constructor.
+    #     super(User, self).__init__(**kwargs)
+
+    #     self.password = User.encrypt_password(kwargs.get('password', ''))
 
     def encode_auth_token(self, user_id):
         """
