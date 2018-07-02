@@ -19,3 +19,5 @@ build/
 
 dump.rdb
 *.rdb
+
+*.sqbpro
