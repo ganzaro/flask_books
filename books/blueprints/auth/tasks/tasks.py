@@ -22,7 +22,7 @@ def send_confirmation_email(user_email):
  
     # send_email('Confirm Email Address', [user_email], html)
     mail.send_email(
-        from_email='adminx@wc.com',
+        from_email='info@wc.com',
         to_email=user_email,
         subject='Confirm Email Address', 
         text=html
@@ -48,7 +48,7 @@ def deliver_password_reset_email(user_email):
  
     # send_email('Confirm Email Address', [user_email], html)
     mail.send_email(
-        from_email='adminx@wc.com',
+        from_email='info@wc.com',
         to_email=user_email,
         subject='Reset Password', 
         text=html

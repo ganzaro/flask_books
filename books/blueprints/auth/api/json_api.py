@@ -5,12 +5,13 @@ from flask import Blueprint, request, make_response, jsonify, abort
 from flask.views import MethodView
 
 from books.app import bcrypt, db
-from books.blueprints.auth.models import User, BlacklistToken
+from books.blueprints.auth.data.models import User, BlacklistToken
 from books.blueprints.profile.models import UserProfile
-from . import auth
-from . usecase import GetUsersUseCase, \
+from .. import auth
+from ..utils.jwt_utils import encode_auth_token
+from .. usecase import GetUsersUseCase, \
             GetUserUseCase, RegisterUserUseCase
-from ...utils.exceptionz import UserAlreadyExistsException
+from ....libs.exceptionz import UserAlreadyExistsException
 # TODO - 
 # repair confirm email, forgot pwd
 # convert to repo pattern
@@ -41,7 +42,7 @@ class RegisterAPI(MethodView):
             print('api-user-is {}'.format(user.email))
 
             # generate the auth token
-            auth_token = user.encode_auth_token(user.id)
+            auth_token = encode_auth_token(user.id)
             resp = {
                 'status': 'success',
                 'message': 'Successfully registered.',

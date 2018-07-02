@@ -2,9 +2,9 @@ from flask import flash, current_app, request, render_template
 from itsdangerous import URLSafeTimedSerializer
 
 from books.app import db
-from books.blueprints.auth.models import User
-from . import auth
-from . forms import PasswordResetForm
+from books.blueprints.auth.data.models import User
+from .. import auth
+from ..utils.forms import PasswordResetForm
 
 
 @auth.route('/confirm/<token>')

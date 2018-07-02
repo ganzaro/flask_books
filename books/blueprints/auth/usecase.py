@@ -1,7 +1,7 @@
-from . utils import encrypt_password
-from . repository import UserRepository
-from . models import User
-from ...utils.exceptionz import UserAlreadyExistsException
+from . utils.auth import encrypt_password
+from . data.repository import UserRepository
+from . data.models import User
+from ...libs.exceptionz import UserAlreadyExistsException
 # from books.app import db
 from books.blueprints.profile.models import UserProfile
 from books.blueprints.profile.repository import UserProfileRepository
@@ -35,6 +35,7 @@ class RegisterUserUseCase():
             else:
                 print('new-user')
                 new_user = User(self.email, encrypt_password(self.password))
+                new_user.role = 'member'
                 print('new user-is {}'.format(self.username))
 
                 self.repo.create_user(new_user)

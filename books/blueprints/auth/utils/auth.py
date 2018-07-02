@@ -1,6 +1,4 @@
-from flask import current_app
 from werkzeug.security import generate_password_hash, check_password_hash
-import jwt
 import datetime
 
 def encrypt_password(plaintext_password):
@@ -15,27 +13,6 @@ def encrypt_password(plaintext_password):
         return generate_password_hash(plaintext_password)
 
     return None
-
-
-
-def encode_auth_token(self, user_id):
-    """
-    Generates the Auth Token
-    :return: string
-    """
-    try:
-        payload = {
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
-            'iat': datetime.datetime.utcnow(),
-            'sub': user_id
-        }
-        return jwt.encode(
-            payload,
-            current_app.config.get('SECRET_KEY'),
-            algorithm='HS256'
-        )
-    except Exception as e:
-        return e    
 
 
 

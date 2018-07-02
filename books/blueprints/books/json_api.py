@@ -9,7 +9,7 @@ from .serializers import pub_schema, pubs_schema
 from books.app import db
 from . usecase import GetPublishersUseCase, \
             GetPublisherUseCase, AddPublisherUseCase
-from ...utils.exceptionz import PublisherNotFoundException
+from ...libs.exceptionz import PublisherNotFoundException
 
 ##########
 # Publishers
