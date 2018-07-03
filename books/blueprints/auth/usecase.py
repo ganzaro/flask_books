@@ -3,8 +3,8 @@ from . data.repository import UserRepository
 from . data.models import User
 from ...libs.exceptionz import UserAlreadyExistsException
 # from books.app import db
-from books.blueprints.profile.models import UserProfile
-from books.blueprints.profile.repository import UserProfileRepository
+from books.blueprints.profile.data.models import UserProfile
+from books.blueprints.profile.data.repository import UserProfileRepository
 
 class RegisterUserUseCase():
     """
@@ -45,7 +45,7 @@ class RegisterUserUseCase():
                 print('new-profile-is {}'.format(user_profile.name))
                 self.profile_repo.create_profile(user_profile)
                 
-                from .tasks import send_confirmation_email
+                from .tasks.tasks import send_confirmation_email
                 send_confirmation_email.delay(new_user.email)
 
                 return new_user

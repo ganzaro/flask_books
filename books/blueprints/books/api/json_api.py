@@ -3,13 +3,15 @@ import json
 from flask import jsonify, request, current_app
 from flask.views import MethodView
 
-from . import books
-from .models import Publisher
-from .serializers import pub_schema, pubs_schema
+from .. import books
+from .. data.models import Publisher
+from .. data.serializers import pub_schema, pubs_schema
 from books.app import db
-from . usecase import GetPublishersUseCase, \
+from .. usecase import GetPublishersUseCase, \
             GetPublisherUseCase, AddPublisherUseCase
-from ...libs.exceptionz import PublisherNotFoundException
+from ....libs.exceptionz import PublisherNotFoundException
+
+# TODO - implem Books, Authors endpoints
 
 ##########
 # Publishers

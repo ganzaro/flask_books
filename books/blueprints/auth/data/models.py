@@ -10,6 +10,8 @@ from itsdangerous import URLSafeTimedSerializer, \
 from books.app import db, bcrypt
 from .... libs.db_libs import AwareDateTime, ResourceMixin
 
+# TODO - clean out models, move fns to repos, utils, etc...
+
 class User(db.Model, ResourceMixin):
     """ User Model for storing user related details """
 

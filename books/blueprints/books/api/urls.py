@@ -8,15 +8,14 @@
 #                  methods=['GET', 'PUT', 'DELETE'])
 
 from . json_api import PublisherAPI
-from . import books
+from .. import books
 
 # auth_blueprint = Blueprint('auth', __name__)
 
 # Define the API resource
 pub_api = PublisherAPI.as_view('pub_api')
-# login_view = LoginView.as_view('login_view')
 
-# Add the url rule for registering a user
+
 books.add_url_rule(
     '/api/v1/publishers',
     defaults={'pub_id': None},

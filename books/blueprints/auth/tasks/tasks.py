@@ -2,7 +2,7 @@ from flask import render_template, url_for, current_app
 from itsdangerous import URLSafeTimedSerializer
 
 from books.app import create_celery_app, mail
-from books.blueprints.auth.models import User
+from books.blueprints.auth.data.models import User
 
 celery = create_celery_app()
 

@@ -6,17 +6,15 @@ from flask.views import MethodView
 
 from books.app import bcrypt, db
 from books.blueprints.auth.data.models import User, BlacklistToken
-from books.blueprints.profile.models import UserProfile
+from books.blueprints.profile.data.models import UserProfile
 from .. import auth
 from ..utils.jwt_utils import encode_auth_token
 from .. usecase import GetUsersUseCase, \
             GetUserUseCase, RegisterUserUseCase
 from ....libs.exceptionz import UserAlreadyExistsException
 # TODO - 
-# repair confirm email, forgot pwd
-# convert to repo pattern
+# convert below to use usecase pattern
 
-#         self.get_users_uc = get_users_uc or GetUsersUseCase()
 
 class RegisterAPI(MethodView):
     """
@@ -205,7 +203,7 @@ def forgot_password():
         abort(400)
 
     try:
-        from .tasks import deliver_password_reset_email
+        from ..tasks.tasks import deliver_password_reset_email
 
         deliver_password_reset_email.delay(email)
         # u = User.initialize_password_reset(email)

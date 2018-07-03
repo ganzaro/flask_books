@@ -1,4 +1,4 @@
-from . repository import PublisherRepository
+from .data.repository import PublisherRepository
 from books.app import db
 from ...libs.exceptionz import PublisherNotFoundException
 

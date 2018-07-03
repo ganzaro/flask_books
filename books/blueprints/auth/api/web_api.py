@@ -6,6 +6,8 @@ from books.blueprints.auth.data.models import User
 from .. import auth
 from ..utils.forms import PasswordResetForm
 
+# TODO - convert below auth web_api to use usecase pattern
+# test out password reset, 
 
 @auth.route('/confirm/<token>')
 def confirm_email(token):
@@ -26,7 +28,6 @@ def confirm_email(token):
         db.session.add(user)
         db.session.commit()
         flash('Thank you for confirming your email address!')
-        print('success - email')
  
     return "Thank you"
 
