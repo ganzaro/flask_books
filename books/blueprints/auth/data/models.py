@@ -1,4 +1,4 @@
-
+import bcrypt
 import jwt
 import datetime
 from collections import OrderedDict
@@ -7,7 +7,7 @@ from flask import current_app
 from itsdangerous import URLSafeTimedSerializer, \
     TimedJSONWebSignatureSerializer
 
-from books.app import db, bcrypt
+from books.app import db
 from .... libs.db_libs import AwareDateTime, ResourceMixin
 
 # TODO - clean out models, move fns to repos, utils, etc...

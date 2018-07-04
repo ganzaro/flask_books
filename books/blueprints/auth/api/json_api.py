@@ -1,10 +1,10 @@
 # project/server/auth/views.py
 
-
+import bcrypt
 from flask import Blueprint, request, make_response, jsonify, abort
 from flask.views import MethodView
 
-from books.app import bcrypt, db
+from books.app import db
 from books.blueprints.auth.data.models import User, BlacklistToken
 from books.blueprints.profile.data.models import UserProfile
 from .. import auth
@@ -77,12 +77,11 @@ class LoginAPI(MethodView):
             user = User.query.filter_by(
                 email=post_data.get('email')
             ).first()
-            if user and bcrypt.check_password_hash(
-                user.password, post_data.get('password')
-            ):
+            # if user and bcrypt.check_password_hash(
+            if user and bcrypt.checkpw(post_data.get('password').encode('utf-8'), user.password):
 
                 # generate token
-                auth_token = user.encode_auth_token(user.id)
+                auth_token = encode_auth_token(user.id)
                 if auth_token:
                     responseObject = {
                         'status': 'success',

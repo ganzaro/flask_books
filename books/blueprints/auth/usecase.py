@@ -1,4 +1,4 @@
-from . utils.auth import encrypt_password
+from . utils.auth import hash_pw_bcrypt
 from . data.repository import UserRepository
 from . data.models import User
 from ...libs.exceptionz import UserAlreadyExistsException
@@ -34,7 +34,8 @@ class RegisterUserUseCase():
                 
             else:
                 print('new-user')
-                new_user = User(self.email, encrypt_password(self.password))
+                new_user = User(self.email, hashPassword_bcrypt(self.password))
+                # new_user = User(self.email, encrypt_password(self.password))
                 new_user.role = 'member'
                 print('new user-is {}'.format(self.username))
 
@@ -52,6 +53,9 @@ class RegisterUserUseCase():
         except Exception as e:
             print(e)
         
+
+class LoginUserUseCase():
+    pass 
 
 
 class GetUsersUseCase():
