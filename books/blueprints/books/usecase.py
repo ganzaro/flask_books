@@ -1,6 +1,6 @@
-from . repository import PublisherRepository
+from .data.repository import PublisherRepository
 from books.app import db
-from ...utils.exceptionz import PublisherNotFoundException
+from ...libs.exceptionz import PublisherNotFoundException
 
 class GetPublishersUseCase():
 

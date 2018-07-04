@@ -18,10 +18,3 @@ def send_email():
     return None
 
 
-
-    # mail.send_email(
-    #     from_email='admin@westcape.com',
-    #     to_email=to,
-    #     subject='Westcape Reset Password',
-    #     text=reset_msg
-    # )

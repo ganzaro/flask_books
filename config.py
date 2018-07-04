@@ -8,7 +8,9 @@ class Config(object):
 
     DEBUG = False
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    BCRYPT_LOG_ROUNDS = 13
 
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     # APP_DIR = os.path.abspath(os.path.dirname(__file__))
     # PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
 
@@ -67,8 +69,12 @@ class TestingConfig(Config):
     """
     Testing configurations
     """
-
     TESTING = True
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'
+    # For faster tests; needs at least 4 to avoid "ValueError: Invalid rounds"
+    BCRYPT_LOG_ROUNDS = 4
+
 
 app_config = {
     'development': DevelopmentConfig,

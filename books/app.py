@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-from flask_bcrypt import Bcrypt
+# from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_sendgrid import SendGrid
 from celery import Celery
@@ -12,14 +12,14 @@ from config import app_config
 
 db = SQLAlchemy()
 ma = Marshmallow()
-bcrypt = Bcrypt()
+# bcrypt = Bcrypt()
 cors = CORS()
 mail = SendGrid()
 
 
 CELERY_TASK_LIST = [
-    'books.blueprints.profile.tasks',
-    'books.blueprints.auth.tasks',
+    'books.blueprints.profile.tasks.tasks',
+    'books.blueprints.auth.tasks.tasks',
 ]
 
 def create_celery_app(app=None):
@@ -65,7 +65,7 @@ def create_app(config_name='development'):
 
     mail.init_app(app)
     ma.init_app(app)
-    bcrypt.init_app(app)
+    # bcrypt.init_app(app)
     cors.init_app(app)
 
     from .blueprints.books import books as books_blueprint

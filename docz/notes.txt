@@ -20,6 +20,8 @@ v4
 decorators
     protect routes 
 
+type hinting
+
 admin
 
 logging
@@ -34,9 +36,11 @@ gunicorn, waitress
 
 cli
 
+libs
+    parsing json args
 
-
-
+patterns
+    factory, data mapping, adapters
 
 
 

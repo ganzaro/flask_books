@@ -1,6 +1,6 @@
 
 from books.app import ma
-from books.blueprints.books.models import Publisher, Author, Book
+from . models import Publisher, Author, Book
 
 class PublisherSchema(ma.ModelSchema):
     class Meta:

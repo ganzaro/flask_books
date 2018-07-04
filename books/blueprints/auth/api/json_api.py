@@ -1,21 +1,20 @@
 # project/server/auth/views.py
 
-
+import bcrypt
 from flask import Blueprint, request, make_response, jsonify, abort
 from flask.views import MethodView
 
-from books.app import bcrypt, db
-from books.blueprints.auth.models import User, BlacklistToken
-from books.blueprints.profile.models import UserProfile
-from . import auth
-from . usecase import GetUsersUseCase, \
+from books.app import db
+from books.blueprints.auth.data.models import User, BlacklistToken
+from books.blueprints.profile.data.models import UserProfile
+from .. import auth
+from ..utils.jwt_utils import encode_auth_token
+from .. usecase import GetUsersUseCase, \
             GetUserUseCase, RegisterUserUseCase
-from ...utils.exceptionz import UserAlreadyExistsException
+from ....libs.exceptionz import UserAlreadyExistsException
 # TODO - 
-# repair confirm email, forgot pwd
-# convert to repo pattern
+# convert below to use usecase pattern
 
-#         self.get_users_uc = get_users_uc or GetUsersUseCase()
 
 class RegisterAPI(MethodView):
     """
@@ -41,7 +40,7 @@ class RegisterAPI(MethodView):
             print('api-user-is {}'.format(user.email))
 
             # generate the auth token
-            auth_token = user.encode_auth_token(user.id)
+            auth_token = encode_auth_token(user.id)
             resp = {
                 'status': 'success',
                 'message': 'Successfully registered.',
@@ -78,12 +77,11 @@ class LoginAPI(MethodView):
             user = User.query.filter_by(
                 email=post_data.get('email')
             ).first()
-            if user and bcrypt.check_password_hash(
-                user.password, post_data.get('password')
-            ):
+            # if user and bcrypt.check_password_hash(
+            if user and bcrypt.checkpw(post_data.get('password').encode('utf-8'), user.password):
 
                 # generate token
-                auth_token = user.encode_auth_token(user.id)
+                auth_token = encode_auth_token(user.id)
                 if auth_token:
                     responseObject = {
                         'status': 'success',
@@ -204,7 +202,7 @@ def forgot_password():
         abort(400)
 
     try:
-        from .tasks import deliver_password_reset_email
+        from ..tasks.tasks import deliver_password_reset_email
 
         deliver_password_reset_email.delay(email)
         # u = User.initialize_password_reset(email)

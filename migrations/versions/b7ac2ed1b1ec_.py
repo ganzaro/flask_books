@@ -1,16 +1,17 @@
 """empty message
 
-Revision ID: 437ffde4128e
+Revision ID: b7ac2ed1b1ec
 Revises: 
-Create Date: 2018-06-26 20:59:16.597858
+Create Date: 2018-07-02 14:39:25.751407
 
 """
 from alembic import op
 import sqlalchemy as sa
+import books.libs.db_libs
 
 
 # revision identifiers, used by Alembic.
-revision = '437ffde4128e'
+revision = 'b7ac2ed1b1ec'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -46,14 +47,32 @@ def upgrade():
     )
     op.create_index(op.f('ix_publishers_name'), 'publishers', ['name'], unique=False)
     op.create_table('users',
+    sa.Column('created_on', books.libs.db_libs.AwareDateTime(), nullable=True),
+    sa.Column('updated_on', books.libs.db_libs.AwareDateTime(), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
+    sa.Column('first_name', sa.String(length=60), nullable=True),
+    sa.Column('last_name', sa.String(length=60), nullable=True),
     sa.Column('password', sa.String(length=255), nullable=False),
-    sa.Column('registered_on', sa.DateTime(), nullable=False),
-    sa.Column('admin', sa.Boolean(), nullable=False),
+    sa.Column('phone_number', sa.String(length=12), nullable=True),
+    sa.Column('is_admin', sa.Boolean(), nullable=True),
+    sa.Column('role', sa.Enum('member', 'admin', name='role_types', native_enum=False), nullable=False),
+    sa.Column('is_active', sa.Boolean(), server_default='1', nullable=False),
+    sa.Column('email_confirmed', sa.Boolean(), nullable=True),
+    sa.Column('email_confirmation_sent_on', books.libs.db_libs.AwareDateTime(), nullable=True),
+    sa.Column('email_confirmed_on', books.libs.db_libs.AwareDateTime(), nullable=True),
+    sa.Column('sign_in_count', sa.Integer(), nullable=False),
+    sa.Column('current_sign_in_on', books.libs.db_libs.AwareDateTime(), nullable=True),
+    sa.Column('current_sign_in_ip', sa.String(length=45), nullable=True),
+    sa.Column('last_sign_in_on', books.libs.db_libs.AwareDateTime(), nullable=True),
+    sa.Column('last_sign_in_ip', sa.String(length=45), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )
+    op.create_index(op.f('ix_users_first_name'), 'users', ['first_name'], unique=False)
+    op.create_index(op.f('ix_users_last_name'), 'users', ['last_name'], unique=False)
+    op.create_index(op.f('ix_users_phone_number'), 'users', ['phone_number'], unique=False)
+    op.create_index(op.f('ix_users_role'), 'users', ['role'], unique=False)
     op.create_table('books',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=100), nullable=True),
@@ -85,6 +104,10 @@ def downgrade():
     op.drop_table('user_profiles')
     op.drop_index(op.f('ix_books_title'), table_name='books')
     op.drop_table('books')
+    op.drop_index(op.f('ix_users_role'), table_name='users')
+    op.drop_index(op.f('ix_users_phone_number'), table_name='users')
+    op.drop_index(op.f('ix_users_last_name'), table_name='users')
+    op.drop_index(op.f('ix_users_first_name'), table_name='users')
     op.drop_table('users')
     op.drop_index(op.f('ix_publishers_name'), table_name='publishers')
     op.drop_table('publishers')

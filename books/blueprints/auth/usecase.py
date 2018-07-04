@@ -1,10 +1,10 @@
-from . utils import encrypt_password
-from . repository import UserRepository
-from . models import User
-from ...utils.exceptionz import UserAlreadyExistsException
+from . utils.auth import hash_pw_bcrypt
+from . data.repository import UserRepository
+from . data.models import User
+from ...libs.exceptionz import UserAlreadyExistsException
 # from books.app import db
-from books.blueprints.profile.models import UserProfile
-from books.blueprints.profile.repository import UserProfileRepository
+from books.blueprints.profile.data.models import UserProfile
+from books.blueprints.profile.data.repository import UserProfileRepository
 
 class RegisterUserUseCase():
     """
@@ -34,7 +34,9 @@ class RegisterUserUseCase():
                 
             else:
                 print('new-user')
-                new_user = User(self.email, encrypt_password(self.password))
+                new_user = User(self.email, hashPassword_bcrypt(self.password))
+                # new_user = User(self.email, encrypt_password(self.password))
+                new_user.role = 'member'
                 print('new user-is {}'.format(self.username))
 
                 self.repo.create_user(new_user)
@@ -44,13 +46,16 @@ class RegisterUserUseCase():
                 print('new-profile-is {}'.format(user_profile.name))
                 self.profile_repo.create_profile(user_profile)
                 
-                from .tasks import send_confirmation_email
+                from .tasks.tasks import send_confirmation_email
                 send_confirmation_email.delay(new_user.email)
 
                 return new_user
         except Exception as e:
             print(e)
         
+
+class LoginUserUseCase():
+    pass 
 
 
 class GetUsersUseCase():
